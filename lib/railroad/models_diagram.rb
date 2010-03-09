@@ -25,9 +25,13 @@ class ModelsDiagram < AppDiagram
     files -= @options.exclude
     files.each do |f| 
       # Hack to namespace.
-      dir = File.dirname(f).split('/').last
-      if dir != "app" and dir != "models"
-        process_class (dir.camelize + "::" + extract_class_name(f)).constantize
+      nm = []
+      File.dirname(f).split('/').each do |d|
+        nm << d.camelize if d != "app" and d != "models"
+      end
+      if !nm.nil? and !nm.empty?
+        nm << extract_class_name(f)
+        process_class nm.join('::')
       else
         process_class extract_class_name(f).constantize
       end

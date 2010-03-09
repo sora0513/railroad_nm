@@ -27,9 +27,13 @@ class ControllersDiagram < AppDiagram
     files << APP_CONTROLLER unless files.include? APP_CONTROLLER
     files.each do |f|
       # Hack to namespace.
-      dir = File.dirname(f).split('/').last
-      if dir != "app" and dir != "controllers"
-        class_name = (dir.camelize + "::" + extract_class_name(f))
+      nm = []
+      File.dirname(f).split('/').each do |d|
+        nm << d.camelize if d != "app" and d != "controllers"
+      end
+      if !nm.nil? and !nm.empty?
+        nm << extract_class_name(f)
+        class_name = nm.join('::')
       else
         class_name = extract_class_name(f)
       end
