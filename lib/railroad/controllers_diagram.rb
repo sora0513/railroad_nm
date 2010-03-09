@@ -24,7 +24,7 @@ class ControllersDiagram < AppDiagram
     STDERR.print "Generating controllers diagram\n" if @options.verbose
 
     files = Dir.glob("app/controllers/**/*_controller.rb") - @options.exclude
-    files << 'app/controllers/application.rb'
+    files << APP_CONTROLLER unless files.include? APP_CONTROLLER
     files.each do |f|
       # Hack to namespace.
       dir = File.dirname(f).split('/').last
